@@ -1,7 +1,7 @@
 pipeline {
     agent { 
         node {
-            label 'docker-agent-python'
+            label 'docker-agent-spring'
             }
       }
       triggers {
@@ -13,6 +13,7 @@ pipeline {
                 echo "Building.."
                 sh '''
                 cd j
+                docker pull maven:3.9-eclipse-temurin-21-alpine
                 mvn clean package -DskipTests
                 docker compose -f docker-compose.yml --build
                 '''
