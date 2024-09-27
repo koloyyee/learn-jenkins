@@ -1,0 +1,10 @@
+services:
+  spring_jenkins:
+    image: paketobuildpacks/spring-boot
+    build: .
+    container_name: spring_jenkins
+    ports:
+      - '8080:8080'
+    extra_hosts:
+      #- "host.docker.internal:172.17.0.1"
+      - "host.docker.internal:host-gateway"

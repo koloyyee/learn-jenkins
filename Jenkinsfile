@@ -12,8 +12,9 @@ pipeline {
             steps {
                 echo "Building.."
                 sh '''
-                cd myapp 
-                pip install -r requirements.txt
+                cd j
+                mvn clean package -DskipTests
+                docker compose -f docker-compose.yml --build
                 '''
             }
         }
@@ -21,9 +22,8 @@ pipeline {
             steps {
                 echo "Testing.."
                 sh '''
-                cd myapp 
-                python3 main.py 
-                python3 main.py --name=David
+                cd j
+                mvn test
                 '''
             }
         }
@@ -31,7 +31,8 @@ pipeline {
             steps {
                 echo 'Deliver....'
                 sh '''
-                echo "doing delivery stuff.."
+                cd j
+                docker compose -f docker-compose.yml --build --detach
                 '''
             }
         }
