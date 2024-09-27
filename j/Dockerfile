@@ -1,3 +1,10 @@
+# Docker Build Maven Stage
+FROM maven:3-eclipse-temurin-21-jammy AS build
+# Copy folder in docker
+WORKDIR /opt/app
+COPY ./ /opt/app
+RUN mvn clean install -DskipTests
+
 # the base image
 FROM eclipse-temurin:21.0.4_7-jre-alpine
 
