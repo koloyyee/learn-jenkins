@@ -21,6 +21,7 @@ pipeline {
             steps {
                 echo "Testing.."
                 sh '''
+                cd myapp 
                 python3 main.py 
                 python3 main.py --name=David
                 '''
