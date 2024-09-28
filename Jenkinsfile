@@ -46,6 +46,9 @@ pipeline {
             label 'docker-agent-spring'
             }
       }
+      triggers {
+        pollSCM '* * * * *'
+      }
     environment {
         DOCKER_COMPOSE_FILE = 'docker-compose.yml'
     }
