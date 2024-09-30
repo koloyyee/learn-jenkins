@@ -50,9 +50,9 @@ pipeline {
     //     pollSCM '* * * * *'
     //   }
     agent any
-    environment {
-        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
-    }
+    // environment {
+    //     DOCKER_COMPOSE_FILE = 'docker-compose.yml'
+    // }
     stages {
         // stage('Clone Repository') {
         //     steps {
@@ -64,16 +64,17 @@ pipeline {
             steps {
                 // Build and deploy the Docker container
                 script {
-                    sh 'docker-compose down'
-                    sh 'docker-compose up --build --detach'
+                    // sh 'docker-compose down'
+                    // sh 'docker-compose up --build --detach'
+                    echo "hello"
                 }
             }
         }
     }
-    post {
-        always {
-            // Clean up resources
-            sh 'docker-compose down'
-        }
-    }
+    // post {
+    //     always {
+    //         // Clean up resources
+    //         sh 'docker-compose down'
+    //     }
+    // }
 }
