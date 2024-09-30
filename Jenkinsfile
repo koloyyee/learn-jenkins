@@ -40,41 +40,63 @@
 //     }
 // }
 
-pipeline {
-  agent any
-  stages {
-    stage("verify tooling") {
-      steps {
-        sh '''
-          docker version
-          docker info
-          docker compose version 
-          curl --version
-          jq --version
-        '''
-      }
-    }
-//     stage('Prune Docker data') {
+// pipeline {
+//   agent any
+//   stages {
+//     stage("verify tooling") {
 //       steps {
-//         sh 'docker system prune -a --volumes -f'
+//         sh '''
+//           docker version
+//           docker info
+//           docker compose version 
+//           curl --version
+//           jq --version
+//         '''
 //       }
 //     }
-//     stage('Start container') {
-//       steps {
-//         sh 'docker compose up -d --no-color --wait'
-//         sh 'docker compose ps'
-//       }
-//     }
-//     stage('Run tests against the container') {
-//       steps {
-//         sh 'curl http://localhost:3000/param?query=demo | jq'
-//       }
-//     }
+// //     stage('Prune Docker data') {
+// //       steps {
+// //         sh 'docker system prune -a --volumes -f'
+// //       }
+// //     }
+// //     stage('Start container') {
+// //       steps {
+// //         sh 'docker compose up -d --no-color --wait'
+// //         sh 'docker compose ps'
+// //       }
+// //     }
+// //     stage('Run tests against the container') {
+// //       steps {
+// //         sh 'curl http://localhost:3000/param?query=demo | jq'
+// //       }
+// //     }
+// //   }
+// //   post {
+// //     always {
+// //       sh 'docker compose down --remove-orphans -v'
+// //       sh 'docker compose ps'
+// //     }
 //   }
-//   post {
-//     always {
-//       sh 'docker compose down --remove-orphans -v'
-//       sh 'docker compose ps'
-//     }
-  }
+// }
+
+pipeline {
+    agent none
+    stages {
+        stage('Back-end') {
+            agent {
+                docker { image 'maven:3.9.9-eclipse-temurin-21-alpine' }
+            }
+            steps {
+                sh 'mvn --version'
+            }
+        }
+        stage('Front-end') {
+            agent {
+                docker { image 'node:20.17.0-alpine3.20' }
+            }
+            steps {
+                sh 'node --version'
+            }
+        }
+    }
 }
