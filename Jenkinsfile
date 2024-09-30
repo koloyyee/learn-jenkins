@@ -60,6 +60,17 @@ pipeline {
         //         git branch: 'main', url: 'git@github.com:yourusername/yourrepo.git'
         //     }
         // }
+        stage("verify tooling") {
+      steps {
+        sh '''
+          docker version
+          docker info
+          docker compose version 
+          curl --version
+          jq --version
+        '''
+      }
+        }
         stage('Build and Deploy') {
             steps {
                 // Build and deploy the Docker container
