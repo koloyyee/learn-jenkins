@@ -41,14 +41,15 @@
 // }
 
 pipeline {
-    agent {
-        node {
-            label 'docker-agent-spring'
-            }
-      }
-      triggers {
-        pollSCM '* * * * *'
-      }
+    // agent {
+    //     node {
+    //         label 'docker-agent-spring'
+    //         }
+    //   }
+    //   triggers {
+    //     pollSCM '* * * * *'
+    //   }
+    agent any
     environment {
         DOCKER_COMPOSE_FILE = 'docker-compose.yml'
     }
