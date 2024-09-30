@@ -41,58 +41,40 @@
 // }
 
 pipeline {
-    // agent {
-    //     node {
-    //         label 'docker-agent-spring'
-    //         }
-    //   }
-    //   triggers {
-    //     pollSCM '* * * * *'
-    //   }
-    agent any
-    // environment {
-    //     DOCKER_COMPOSE_FILE = 'docker-compose.yml'
-    // }
-    stages {
-        // stage('Clone Repository') {
-        //     steps {
-        //         // Clone the GitHub repository
-        //         git branch: 'main', url: 'git@github.com:yourusername/yourrepo.git'
-        //     }
-        // }
-        stage("verify tooling") {
+  agent any
+  stages {
+    stage("verify tooling") {
       steps {
         sh '''
           docker version
           docker info
           docker compose version 
+          curl --version
+          jq --version
         '''
       }
-        }
-            stage('Prune Docker data') {
+    }
+    stage('Prune Docker data') {
       steps {
         sh 'docker system prune -a --volumes -f'
       }
     }
-        stage('Build and Deploy') {
-            steps {
-                // Build and deploy the Docker container
-                script {
-                    
-                    sh ''' 
-                    cd j
-                    docker-compose down
-                    docker-compose up --build --detach
-                    '''
-                    sh 'echo "hello'
-                }
-            }
-        }
+    stage('Start container') {
+      steps {
+        sh 'docker compose up -d --no-color --wait'
+        sh 'docker compose ps'
+      }
     }
-    // post {
-    //     always {
-    //         // Clean up resources
-    //         sh 'docker-compose down'
-    //     }
-    // }
+    stage('Run tests against the container') {
+      steps {
+        sh 'curl http://localhost:3000/param?query=demo | jq'
+      }
+    }
+  }
+  post {
+    always {
+      sh 'docker compose down --remove-orphans -v'
+      sh 'docker compose ps'
+    }
+  }
 }
