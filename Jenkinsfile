@@ -69,6 +69,11 @@ pipeline {
         '''
       }
         }
+            stage('Prune Docker data') {
+      steps {
+        sh 'docker system prune -a --volumes -f'
+      }
+    }
         stage('Build and Deploy') {
             steps {
                 // Build and deploy the Docker container
