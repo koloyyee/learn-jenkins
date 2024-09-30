@@ -63,6 +63,8 @@ pipeline {
         stage("verify tooling") {
       steps {
         sh '''
+          docker version
+          docker info
           docker compose version 
         '''
       }
@@ -71,9 +73,13 @@ pipeline {
             steps {
                 // Build and deploy the Docker container
                 script {
-                    // sh 'docker-compose down'
-                    // sh 'docker-compose up --build --detach'
-                    echo "hello"
+                    
+                    sh ''' 
+                    cd j
+                    docker-compose down
+                    docker-compose up --build --detach
+                    '''
+                    sh 'echo "hello'
                 }
             }
         }
